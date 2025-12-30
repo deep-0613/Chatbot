@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shimmer/shimmer.dart';
 import 'fraud_detection_service.dart';
 import 'message_model.dart';
 import 'additional_features_screen.dart';
 
-void main() async {
-  await dotenv.load(fileName: ".env");
+void main() {
   runApp(const FraudGuardApp());
 }
 
