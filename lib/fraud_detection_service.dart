@@ -1,5 +1,4 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FraudDetectionService {
   late GenerativeModel _model;
@@ -9,18 +8,23 @@ class FraudDetectionService {
   }
   
   void _initializeModel() {
-    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
+    // Your Gemini API key
+    const apiKey = 'AIzaSyAiKiEHcQPySbRC8JlLfikDHwNx1ZBq7gw';
+    
     if (apiKey.isEmpty) {
-      throw Exception('Gemini API key not found in environment variables');
+      throw Exception('API key cannot be empty');
     }
+    
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3-flash-preview',
       apiKey: apiKey,
     );
   }
   
   Future<String> analyzeFraudRisk(String userInput) async {
     try {
+      print('Analyzing message: $userInput');
+      
       final prompt = '''
 You are Fraud Guard AI, a cyber awareness and fraud detection expert. Analyze the following user message for potential fraud risks:
 
@@ -36,10 +40,21 @@ Provide a response that:
 Keep responses concise but informative (2-3 sentences max).
 ''';
       
+      print('Sending request to Gemini API...');
       final response = await _model.generateContent([Content.text(prompt)]);
-      return response.text ?? 'I apologize, but I cannot process this request right now.';
-    } catch (e) {
-      return 'I apologize, but I encountered an error. Please try again.';
+      
+      if (response.text == null || response.text!.isEmpty) {
+        print('Received empty response from API');
+        return 'I apologize, but I cannot process this request right now. Please try again.';
+      }
+      
+      print('Received response: ${response.text}');
+      return response.text!;
+      
+    } catch (e, stackTrace) {
+      print('Error in analyzeFraudRisk: $e');
+      print('Stack trace: $stackTrace');
+      return 'I apologize, but I encountered an error: ${e.toString()}. Please try again.';
     }
   }
   
