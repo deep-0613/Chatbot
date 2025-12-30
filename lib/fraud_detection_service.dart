@@ -9,7 +9,7 @@ class FraudDetectionService {
   
   void _initializeModel() {
     // Your Gemini API key
-    const apiKey = 'AIzaSyAiKiEHcQPySbRC8JlLfikDHwNx1ZBq7gw';
+    const apiKey = 'Youe API Key';
     
     if (apiKey.isEmpty) {
       throw Exception('API key cannot be empty');
